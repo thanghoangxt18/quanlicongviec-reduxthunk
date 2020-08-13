@@ -25,19 +25,36 @@ export const fetchListTaskFailed = (error) => {
     }
 }
 
-export const fetchTaskListRequest = () => {
-    return dispatch => {    //thuc thi hanh dong lay du lieu theo middleware rule o axiosService
-        dispatch(fetchListTask())    //goi action nay truoc khi call taskApis
-        taskApis
-            .getList()
-            .then(res => {
-                const {data} = res
-                console.log(data)
-                dispatch(fetchListTaskSuccess(data)) // co dau () la thuc thi
-            })
-            .catch(error=>{
-                console.log('error:', error)
-                dispatch(fetchListTaskFailed())
-            })
+export const fillterTask = (keyword) => {
+    return {
+        type: TaskConstants.FILLTER_TASK,
+        payload: {
+            keyword
+        }
     }
 }
+
+export const fillterTaskSuccess = (data) => ({
+    type: TaskConstants.FILLTER_TASK_SUCCESS,
+    payload: {
+        data
+    }
+})
+
+//
+// export const fetchTaskListRequest = () => {
+//     return dispatch => {    //thuc thi hanh dong lay du lieu theo middleware rule o axiosService
+//         dispatch(fetchListTask())    //goi action nay truoc khi call taskApis
+//         taskApis
+//             .getList()
+//             .then(res => {
+//                 const {data} = res
+//                 console.log(data)
+//                 dispatch(fetchListTaskSuccess(data)) // co dau () la thuc thi
+//             })
+//             .catch(error=>{
+//                 console.log('error:', error)
+//                 dispatch(fetchListTaskFailed())
+//             })
+//     }
+// }

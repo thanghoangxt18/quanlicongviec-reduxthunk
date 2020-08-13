@@ -8,43 +8,48 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import {withStyles} from '@material-ui/styles'
 import styles from './styles'
+import {Modal, Grid} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import PropTypes from 'prop-types';
 
 class TaskForm extends Component {
     render() {
-        const {open,onClose} = this.props
+        const {classes} = this.props
         return (
-            <Dialog
-                open={open}
-                onClose={onClose}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">Thêm mới công việc</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="Multiline"
-                        multiline
-                        rowsMax={4}
-                    />
-                    <br/>
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="Multiline"
-                        multiline
-                        rowsMax={4}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={onClose} color="primary">
-                        Oke
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <form>
+                <Grid container>
+                    <Grid item md={12}>
+                        <TextField
+                            id="standard-multiline-flexible"
+                            label="Tiêu đề"
+                            multiline
+                            className={classes.textField}
+                        />
+                    </Grid>
+                    <Grid item md={12}>
+                        <TextField
+                            id="standard-multiline-flexible"
+                            label="Mô tả"
+                            multiline
+                            className={classes.textField}
+                        />
+                    </Grid>
+                    <Grid item md={12}>
+                        <Box display="flex" flexDirection="row-reverse" mt={2}>
+                            <Box ml={1}>
+                                <Button variant="contained" color="primary">Lưu Lại</Button>
+                            </Box>
+                            <Button variant="contained" >Hủy Bỏ</Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </form>
         );
     }
+}
+
+TaskForm.propTypes = {
+    classes: PropTypes.object,
 }
 
 export default withStyles(styles)(TaskForm)

@@ -1,4 +1,10 @@
 const styles = (theme) => ({
+    taskboard: {
+      marginTop: "20px"
+    },
+    mr5: {
+        marginLeft:"30px"
+    }
     // taskboard:{
     //     display: "flex",
     //     alignItems:"center",

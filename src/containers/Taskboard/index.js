@@ -2,25 +2,20 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/styles'
 import styles from './styles'
 import Button from '@material-ui/core/Button'
-import Icon from '@material-ui/core/Icon'
 import Addicon from "@material-ui/icons/Add"
 import Grid from '@material-ui/core/Grid';
 import {STATUSES} from "../../constants";
 import TaskList from "../../components/TaskList";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from "@material-ui/core/TextField";
 import TaskForm from "../../components/TaskForm";
 import {connect} from 'react-redux'
 import {bindActionCreators} from "redux"
 import * as taskActions from './../../actions/task'
+import * as modalActions from './../../actions/modal'
 import PropTypes from 'prop-types'
 import Box from "@material-ui/core/Box";
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SearchBox from "../../components/SearchBox";
 
 class TaskBoard extends Component {
 
@@ -30,8 +25,8 @@ class TaskBoard extends Component {
 
     componentDidMount() {
         const {taskActions} = this.props   //goi den list cac hanh dong cua task
-        const {fetchTaskListRequest} = taskActions // goi den action lay list
-        fetchTaskListRequest()    //thuc thi hanh dong lay list do
+        const {fetchListTask} = taskActions // goi den action lay list
+        fetchListTask()    //thuc thi hanh dong lay list do
     }
 
     renderBoard() {
@@ -63,9 +58,11 @@ class TaskBoard extends Component {
     }
 
     openForm = () => {
-        this.setState({
-            open: true
-        })
+        const {modalActions} = this.props
+        const { showModal, changeModalTitle, changeModalContent}= modalActions
+        showModal()
+        changeModalTitle('Thêm mới công việc');
+        changeModalContent(<TaskForm/>)
     }
 
     renderForm() {
@@ -76,6 +73,22 @@ class TaskBoard extends Component {
                 open={open}
                 onClose={this.handleClose}
             />
+        )
+        return xhtml
+    }
+
+    handleFillter = (event) => {
+        console.log('event:', event)
+        const {value} = event.target
+        const {taskActions} = this.props  //goi den list cac actions cua task
+        const {fillterTask} = taskActions //goi ham chu chua excute
+        fillterTask(value)    //execute function
+    }
+
+    renderSearchBox() {
+        let xhtml = null
+        xhtml = (
+            <SearchBox handleChange={this.handleFillter}/>
         )
         return xhtml
     }
@@ -101,14 +114,14 @@ class TaskBoard extends Component {
                 <Button
                     variant="contained"
                     color="primary"
-                    className={classes.button}
+                    className={classes.mr5}
                     onClick={this.ShowToast}
                 >
                     Hien thi thong bao
                 </Button>
-
+                {this.renderSearchBox()}
                 {this.renderBoard()}
-                {this.renderForm()}
+                {this.renderForm()} {/* Ngay ban dau da render ra form nhung open = false nen no khong hien */}
             </div>
         )
     }
@@ -117,12 +130,19 @@ class TaskBoard extends Component {
 TaskBoard.propsTypes = {
     classes: PropTypes.object,
     taskActions: PropTypes.shape({
-        fetchTaskListRequest: PropTypes.func
+        fetchListTask: PropTypes.func,
+        fillterTask: PropTypes.func
     }),
-    listTask: PropTypes.array
+    listTask: PropTypes.array,
+    modalActions: PropTypes.shape({
+        showModal: PropTypes.func,
+        hideModal: PropTypes.func,
+        changeModalTitle: PropTypes.func,
+        changeModalContent: PropTypes.func
+    })
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = state => {   //chuyen state cua store thang prop cua component
     return {
         listTask: state.task.listTask
     }
@@ -130,7 +150,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        taskActions: bindActionCreators(taskActions, dispatch)    //actions theo huong module: module task
+        taskActions: bindActionCreators(taskActions, dispatch),   //actions theo huong module: module task
+        modalActions: bindActionCreators(modalActions, dispatch)    //actions theo huong module: module task
     }
 }
 
