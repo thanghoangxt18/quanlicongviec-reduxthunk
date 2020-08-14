@@ -1,11 +1,13 @@
 import {combineReducers} from "redux"
+import { reducer as formReducer } from 'redux-form'
 import taskReducer from './tasks'
 import uiReducer from './ui'
 import modalReducer from './modal'
 const rootReducer = combineReducers({
     task: taskReducer,
     ui: uiReducer,
-    modal: modalReducer
+    modal: modalReducer,
+    form: formReducer
 })
 
 export default rootReducer

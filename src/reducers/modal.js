@@ -3,7 +3,7 @@ import * as types from './../constants/modal'
 const initialState = {
     showModal: false,
     component: null,
-    title:''
+    title: ''
 }
 
 const reducer = (state = initialState, action) => {
@@ -17,7 +17,9 @@ const reducer = (state = initialState, action) => {
         case types.HIDE_MODAL: {
             return {
                 ...state,
-                showModal: false
+                showModal: false,
+                title: '',
+                component: null
             }
         }
         case types.CHANGE_MODAL_TITLE: {
@@ -27,7 +29,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         case types.CHANGE_MODAL_CONTENT: {
-            const component = action.payload
+            const {component} = action.payload
             return {
                 ...state,
                 component

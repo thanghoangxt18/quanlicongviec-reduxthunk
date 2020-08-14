@@ -6,7 +6,7 @@ import Addicon from "@material-ui/icons/Add"
 import Grid from '@material-ui/core/Grid';
 import {STATUSES} from "../../constants";
 import TaskList from "../../components/TaskList";
-import TaskForm from "../../components/TaskForm";
+import TaskForm from "../TaskForm";
 import {connect} from 'react-redux'
 import {bindActionCreators} from "redux"
 import * as taskActions from './../../actions/task'
@@ -59,10 +59,10 @@ class TaskBoard extends Component {
 
     openForm = () => {
         const {modalActions} = this.props
-        const { showModal, changeModalTitle, changeModalContent}= modalActions
+        const { showModal, changeModalTitle, changeModalContent, hideModal}= modalActions
         showModal()
         changeModalTitle('Thêm mới công việc');
-        changeModalContent(<TaskForm/>)
+        changeModalContent(<TaskForm />)
     }
 
     renderForm() {
@@ -121,7 +121,7 @@ class TaskBoard extends Component {
                 </Button>
                 {this.renderSearchBox()}
                 {this.renderBoard()}
-                {this.renderForm()} {/* Ngay ban dau da render ra form nhung open = false nen no khong hien */}
+                {/*{this.renderForm()} /!* Ngay ban dau da render ra form nhung open = false nen no khong hien *!/*/}
             </div>
         )
     }
@@ -151,7 +151,7 @@ const mapStateToProps = state => {   //chuyen state cua store thang prop cua com
 const mapDispatchToProps = dispatch => {
     return {
         taskActions: bindActionCreators(taskActions, dispatch),   //actions theo huong module: module task
-        modalActions: bindActionCreators(modalActions, dispatch)    //actions theo huong module: module task
+        modalActions: bindActionCreators(modalActions, dispatch)    //actions theo huong module: module modal
     }
 }
 

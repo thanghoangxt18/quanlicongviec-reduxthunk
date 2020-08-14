@@ -1,22 +1,25 @@
 import React, {Component} from 'react';
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+
 import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import {withStyles} from '@material-ui/styles'
 import styles from './styles'
 import {Modal, Grid} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import PropTypes from 'prop-types';
+import {bindActionCreators, compose} from "redux";
+import {connect} from "react-redux";
+import * as modalActions from './../../actions/modal'
+import {reduxForm, Field} from 'redux-form'
+import {withReduxForm} from "redux-form/lib/ReduxFormContext";
+import renderTextField from "../../components/FormHelper/TextField";
 
 class TaskForm extends Component {
     render() {
-        const {classes} = this.props
+        const {classes, modalActionCreators, handleSubmit } = this.props
+        const {hideModal} = modalActionCreators
         return (
-            <form>
+            <form onSubmit={handleSubmit(this.handleSubmitForm)}>
                 <Grid container>
                     <Grid item md={12}>
                         <TextField
@@ -24,6 +27,14 @@ class TaskForm extends Component {
                             label="Tiêu đề"
                             multiline
                             className={classes.textField}
+                        />
+                        <Field
+                           id="title"
+                           label="Tieu de"
+                           className = {classes.textField}
+                           margin = "normal"
+                           name="title"
+                           component={renderTextField}
                         />
                     </Grid>
                     <Grid item md={12}>
@@ -39,7 +50,7 @@ class TaskForm extends Component {
                             <Box ml={1}>
                                 <Button variant="contained" color="primary">Lưu Lại</Button>
                             </Box>
-                            <Button variant="contained" >Hủy Bỏ</Button>
+                            <Button variant="contained" onClick={hideModal}>Hủy Bỏ</Button>
                         </Box>
                     </Grid>
                 </Grid>
@@ -50,6 +61,26 @@ class TaskForm extends Component {
 
 TaskForm.propTypes = {
     classes: PropTypes.object,
+    modalActionCreators: PropTypes.shape({
+        hideModal: PropTypes.func
+    })
 }
 
-export default withStyles(styles)(TaskForm)
+const mapStateToProps = null
+
+const mapDispatchToProps = dispatch => ({
+    modalActionCreators: bindActionCreators(modalActions, dispatch)
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+const FORM_NAME = 'TASK_MANAGEMENT'
+
+const withReduxForm = reduxForm({
+    form: FORM_NAME
+})
+
+export default compose(
+    withStyles(styles),
+    withConnect,
+    withReduxForm     //connect to store của redux-form
+)(TaskForm)
