@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {withStyles} from '@material-ui/styles'
@@ -11,7 +10,7 @@ import {bindActionCreators, compose} from "redux";
 import {connect} from "react-redux";
 import * as modalActions from './../../actions/modal'
 import {reduxForm, Field} from 'redux-form'
-import {withReduxForm} from "redux-form/lib/ReduxFormContext";
+//import {withReduxForm} from "redux-form/lib/ReduxFormContext";
 import renderTextField from "../../components/FormHelper/TextField";
 
 class TaskForm extends Component {
@@ -19,7 +18,7 @@ class TaskForm extends Component {
         const {classes, modalActionCreators, handleSubmit } = this.props
         const {hideModal} = modalActionCreators
         return (
-            <form onSubmit={handleSubmit(this.handleSubmitForm)}>
+            <form>
                 <Grid container>
                     <Grid item md={12}>
                         <TextField
@@ -27,14 +26,6 @@ class TaskForm extends Component {
                             label="Tiêu đề"
                             multiline
                             className={classes.textField}
-                        />
-                        <Field
-                           id="title"
-                           label="Tieu de"
-                           className = {classes.textField}
-                           margin = "normal"
-                           name="title"
-                           component={renderTextField}
                         />
                     </Grid>
                     <Grid item md={12}>
@@ -82,5 +73,5 @@ const withReduxForm = reduxForm({
 export default compose(
     withStyles(styles),
     withConnect,
-    withReduxForm     //connect to store của redux-form
+    withReduxForm
 )(TaskForm)
